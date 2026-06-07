@@ -793,6 +793,7 @@ void SetupServerArgs(NodeContext& node)
     argsman.AddArg("-platform-user=<user>", "Set the username for the \"platform user\", a restricted user intended to be used by PirateCash Platform, to the specified username.", ArgsManager::ALLOW_ANY, OptionsCategory::MASTERNODE);
     argsman.AddArg("-corsarpcuser=<user>", "Username for the local Corsa messenger node RPC connection. Required to start a masternode (PIP-0001 stage 1).", ArgsManager::ALLOW_ANY | ArgsManager::SENSITIVE, OptionsCategory::MASTERNODE);
     argsman.AddArg("-corsarpcpassword=<pw>", "Password for the local Corsa messenger node RPC connection. Required to start a masternode (PIP-0001 stage 1).", ArgsManager::ALLOW_ANY | ArgsManager::SENSITIVE, OptionsCategory::MASTERNODE);
+    argsman.AddArg("-corsaip=<ip>", "TCP IP of the Corsa messenger node RPC endpoint.", ArgsManager::ALLOW_ANY, OptionsCategory::MASTERNODE);
     argsman.AddArg("-corsarpcport=<port>", "TCP port of the local Corsa messenger node RPC endpoint on 127.0.0.1 (e.g. 46464). Required to start a masternode (PIP-0001 stage 1). Corsa must run on the same server as the masternode; the daemon never connects to a non-loopback Corsa host.", ArgsManager::ALLOW_ANY, OptionsCategory::MASTERNODE);
     argsman.AddArg("-corsarpctimeout=<n>", "Per-attempt timeout in seconds for the Corsa node_status probe (default: 10)", ArgsManager::ALLOW_ANY, OptionsCategory::MASTERNODE);
     argsman.AddArg("-corsarpcattempts=<n>", "Number of probe attempts before refusing to start the masternode (default: 5)", ArgsManager::ALLOW_ANY, OptionsCategory::MASTERNODE);
@@ -1550,6 +1551,9 @@ bool AppInitParameterInteraction(const ArgsManager& args)
         if (args.GetArg("-corsarpcuser", "").empty()) {
             return InitError(Untranslated("Masternode requires -corsarpcuser to be set (PIP-0001 stage 1)"));
         }
+        if (args.GetArg("-corsaip", "").empty()) {
+            return InitError(Untranslated("Masternode requires -corsaip to be set (PIP-0001 stage 1)"));
+        }
         if (args.GetArg("-corsarpcpassword", "").empty()) {
             return InitError(Untranslated("Masternode requires -corsarpcpassword to be set (PIP-0001 stage 1)"));
         }
@@ -1723,7 +1727,7 @@ bool AppInitMain(const CoreContext& context, NodeContext& node, interfaces::Bloc
         // hardcoded to loopback; only the port is operator-supplied.
         {
             corsa::ProbeConfig pc;
-            pc.host = "127.0.0.1";
+            pc.host = args.GetArg("-corsaip", "127.0.0.1");
             pc.port = static_cast<uint16_t>(args.GetArg("-corsarpcport", 0));
             pc.rpc_user = args.GetArg("-corsarpcuser", "");
             pc.rpc_password = args.GetArg("-corsarpcpassword", "");
