@@ -1543,6 +1543,7 @@ bool AppInitParameterInteraction(const ArgsManager& args)
             return InitError(_("You can not disable governance validation on a masternode."));
         }
 
+/*
         // PIP-0001 stage 1: a masternode must not start unless the operator
         // explicitly configures local Corsa messenger RPC credentials and
         // endpoint. The Corsa node lives on the same server (the daemon
@@ -1566,6 +1567,7 @@ bool AppInitParameterInteraction(const ArgsManager& args)
                 "Invalid -corsarpcport=%d: must be a TCP port in 1..65535 (PIP-0001 stage 1)"),
                 corsaRpcPortArg));
         }
+*/
     }
 
     fDisableGovernance = args.GetBoolArg("-disablegovernance", false);
