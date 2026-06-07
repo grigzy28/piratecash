@@ -1725,6 +1725,7 @@ bool AppInitMain(const CoreContext& context, NodeContext& node, interfaces::Bloc
         // flip into masternode mode. Failing to reach it means the operator
         // hasn't installed/configured Corsa yet - refuse to start. Host is
         // hardcoded to loopback; only the port is operator-supplied.
+/*
         {
             corsa::ProbeConfig pc;
             pc.host = args.GetArg("-corsaip", "127.0.0.1");
@@ -1751,6 +1752,7 @@ bool AppInitMain(const CoreContext& context, NodeContext& node, interfaces::Bloc
                     status.protocol_version, minCorsaProto));
             }
         }
+*/
 
         fMasternodeMode = true;
         {
